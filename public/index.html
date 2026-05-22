@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>CopperFlorence | Music & Video Vault</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: modern professional touch -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1a1308 0%, #2c1e12 100%);
+            font-family: 'Inter', sans-serif;
+            color: #f5e7d9;
+            padding: 1.5rem;
+            min-height: 100vh;
+        }
+
+        /* copper flower global motif */
+        .copper-flower-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.12;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath fill='%23d97a3c' d='M100,20 L115,75 L175,75 L125,105 L145,160 L100,130 L55,160 L75,105 L25,75 L85,75 Z' /%3E%3Ccircle cx='100' cy='100' r='12' fill='%23b45f2b'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 60px;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* header + logo copper flower external */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(12px);
+            padding: 1rem 2rem;
+            border-radius: 80px;
+            border: 1px solid rgba(217, 122, 60, 0.5);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-icon {
+            font-size: 2.6rem;
+            filter: drop-shadow(0 0 4px #d97a3c);
+            color: #e68a4d;
+        }
+        .logo-text h1 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #f3c29c, #d97a3c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo-text p {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            letter-spacing: 1px;
+        }
+
+        .search-area {
+            flex: 1;
+            max-width: 500px;
+            display: flex;
+            background: #2f241bb3;
+            border-radius: 60px;
+            border: 1px solid #d97a3c70;
+            overflow: hidden;
+            backdrop-filter: blur(4px);
+        }
+        .search-area input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 0.9rem 1.5rem;
+            font-size: 1rem;
+            color: #f5e7d9;
+            outline: none;
+            font-weight: 400;
+        }
+        .search-area input::placeholder {
+            color: #c9ae8b;
+        }
+        .search-area button {
+            background: #d97a3c;
+            border: none;
+            padding: 0 1.8rem;
+            cursor: pointer;
+            color: #1e150c;
+            font-size: 1.3rem;
+            transition: 0.2s;
+        }
+        .search-area button:hover {
+            background: #b95f2c;
+        }
+
+        .quality-picker {
+            display: flex;
+            gap: 10px;
+            background: #2c1f14aa;
+            padding: 8px 16px;
+            border-radius: 60px;
+            backdrop-filter: blur(4px);
+        }
+        .quality-btn {
+            background: none;
+            border: 1px solid #d97a3c80;
+            color: #ecd6be;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quality-btn.active {
+            background: #d97a3c;
+            color: #1f160e;
+            border-color: #d97a3c;
+            box-shadow: 0 0 8px #d97a3c;
+        }
+
+        /* music grid + cards */
+        .results-section h2 {
+            margin: 2rem 0 1rem 0.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 4px solid #d97a3c;
+            padding-left: 18px;
+        }
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.8rem;
+        }
+
+        .track-card {
+            background: rgba(30, 20, 12, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 2rem;
+            padding: 1rem;
+            border: 1px solid rgba(217,122,60,0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        .track-card:hover {
+            transform: translateY(-5px);
+            border-color: #d97a3c;
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.5);
+        }
+        .thumbnail {
+            width: 100%;
+            height: 160px;
+            background: #2b1f15;
+            border-radius: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #d97a3c;
+            margin-bottom: 12px;
+            background-image: radial-gradient(circle at 20% 35%, #4a311f, #1f140c);
+        }
+        .track-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .track-details {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin: 5px 0 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .card-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .btn-download, .btn-play-preview {
+            flex: 1;
+            background: #3e2c1e;
+            border: none;
+            padding: 8px 0;
+            border-radius: 40px;
+            color: #f0dbca;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .btn-download {
+            background: #d97a3c;
+            color: #20160e;
+        }
+        .btn-download:hover {
+            background: #c06429;
+            transform: scale(0.98);
+        }
+        .btn-play-preview:hover {
+            background: #5e4230;
+        }
+        audio {
+            width: 100%;
+            margin-top: 12px;
+            border-radius: 30px;
+        }
+
+        /* loader & empty state */
+        .loader {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.4rem;
+            color: #e2b48c;
+        }
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            background: #2d2119aa;
+            border-radius: 2rem;
+        }
+
+        /* footer copper flower credit */
+        .footer-flower {
+            margin-top: 4rem;
+            text-align: center;
+            font-size: 0.75rem;
+            opacity: 0.6;
+            border-top: 1px solid #d97a3c30;
+            padding-top: 2rem;
+        }
+        @media (max-width: 780px) {
+            body { padding: 1rem; }
+            .header { flex-direction: column; align-items: stretch; border-radius: 2rem; }
+            .search-area { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+<div class="copper-flower-bg"></div>
+<div class="app-container">
+    <div class="header">
+        <div class="logo-area">
+            <div class="logo-icon"><i class="fas fa-fan"></i></div>
+            <div class="logo-text">
+                <h1>CopperFlorence</h1>
+                <p>✦ copper flower resonance ✦</p>
+            </div>
+        </div>
+        <div class="search-area">
+            <input type="text" id="searchInput" placeholder="Search songs, artists, videos... (e.g. Weeknd, Billie, Rock)" autocomplete="off">
+            <button id="searchBtn"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="quality-picker" id="qualitySelector">
+            <button data-quality="high" class="quality-btn active">🎧 High (320kbps)</button>
+            <button data-quality="medium" class="quality-btn">📀 Medium (160kbps)</button>
+        </div>
+    </div>
+
+    <div class="results-section">
+        <h2><i class="fas fa-music" style="color:#d97a3c;"></i> Sonic Petals · Curated & Downloadable</h2>
+        <div id="musicGrid" class="music-grid">
+            <!-- dynamic cards will appear here -->
+            <div class="loader"><i class="fas fa-cog fa-spin"></i> loading copper blooms...</div>
+        </div>
+    </div>
+    <div class="footer-flower">
+        <i class="fas fa-seedling"></i> copper flower alchemy · high quality audio/video downloads · all in one file
+    </div>
+</div>
+
+<script>
+    // --------------------------------------------------------------
+    // MOCK DATABASE with songs & videos (realistic metadata)
+    // includes both audio and video references, plus search across title/artist
+    // Each entry has: id, title, artist, type (audio/video), coverIcon, 
+    // audioPreviewUrl (data url or sample mp3), downloadUrl (demo mp4/mp3)
+    // For actual demonstration, we embed short preview samples from free sources.
+    // IMPORTANT: All downloads are simulated via blobs using fetch of public domain/CC0 demo tracks.
+    // We use external samples that are safe: freesound.org / sample-files, but to avoid network issues,
+    // we will generate inline dummy audio using Web Audio? better: use online known sample clips.
+    // We'll use reliable test MP3 from github (Uppbeat or CC0). 
+    // For production deploy, these sample urls are static and work. Also video sample small mp4.
+    // --------------------------------------------------------------
+    
+    // Comprehensive music & video library (copper flower inside)
+    const LIBRARY = [
+        { id: 1, title: "Midnight Copper", artist: "Flora Vibe", type: "audio", qualityHigh: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", qualityMed: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", previewMp3: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", thumbnailIcon: "🎸", videoUrl: null },
+        { id: 2, title: "Blossom Fury", artist: "Copper Petals", type: "audio", qualityHigh: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", qualityMed: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", previewMp3: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", thumbnailIcon: "🎤" },
+        { id: 3, title: "Electric Flower Field", artist: "Lunar Bloom", type: "video", qualityHigh: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", qualityMed: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", previewMp3: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", thumbnailIcon: "🎥", videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" },
+        { id: 4, title: "Neon Dusk", artist: "Rose & Rust", type: "audio", qualityHigh: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", qualityMed: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", previewMp3: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", thumbnailIcon: "🎷" },
+        { id: 5, title: "Velvet Copper (Live)", artist: "The Alchemists", type: "video", qualityHigh: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", qualityMed: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", previewMp3: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", thumbnailIcon: "🎬", videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" },
+        { id: 6, title: "Saffron Dreams", artist: "Deep Copper", type: "audio", qualityHigh: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3", qualityMed: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3", previewMp3: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3", thumbnailIcon: "🎹" },
+        { id: 7, title: "Forged in Fire", artist: "Metallurgy", type: "video", qualityHigh: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFunflies.mp4", qualityMed: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFunflies.mp4", previewMp3: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFunflies.mp4", thumbnailIcon: "🔥", videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFunflies.mp4" },
+        { id: 8, title: "Whispers of the Forge", artist: "Anvilia", type: "audio", qualityHigh: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3", qualityMed: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3", previewMp3: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3", thumbnailIcon: "🎻" },
+        { id: 9, title: "Copper Rain", artist: "Bloom Syndicate", type: "audio", qualityHigh: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3", qualityMed: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3", previewMp3: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3", thumbnailIcon: "🌧️" },
+        { id: 10, title: "Rust & Rhythm", artist: "CopperFlower", type: "video", qualityHigh: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCar.mp4", qualityMed: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCar.mp4", previewMp3: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCar.mp4", thumbnailIcon: "🎥", videoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCar.mp4" }
+    ];
+
+    // Current quality state: 'high' or 'medium'
+    let currentQuality = "high";
+    let currentSearchResults = [...LIBRARY];
+
+    // DOM elements
+    const gridContainer = document.getElementById("musicGrid");
+    const searchInput = document.getElementById("searchInput");
+    const searchBtn = document.getElementById("searchBtn");
+
+    // Helper: get download URL based on quality & entry
+    function getDownloadUrl(item) {
+        if (currentQuality === "high") {
+            return item.qualityHigh;
+        } else {
+            return item.qualityMed;
+        }
+    }
+
+    // Helper: get preview src (audio preview for audio, video for video preview player)
+    function getPreviewSrc(item) {
+        return item.previewMp3;
+    }
+
+    // Download function (trigger file download via anchor)
+    async function downloadMedia(item) {
+        const url = getDownloadUrl(item);
+        const ext = item.type === "audio" ? ".mp3" : ".mp4";
+        const filename = `${item.title} - ${item.artist}${ext}`;
+        try {
+            // Fetch the resource and create a blob to force download (works with CORS-friendly public files)
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Network error");
+            const blob = await response.blob();
+            const blobUrl = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = blobUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(blobUrl);
+        } catch (err) {
+            console.warn("Direct download fallback using link");
+            // fallback: open in new tab (user can save as)
+            const a = document.createElement("a");
+            a.href = url;
+            a.target = "_blank";
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    }
+
+    // Play preview (uses HTML5 audio/video element inside card)
+    function renderCards(results) {
+        if (!results.length) {
+            gridContainer.innerHTML = `<div class="no-results"><i class="fas fa-copper-flower"></i> no copper petals found... try another melody 🌸</div>`;
+            return;
+        }
+        gridContainer.innerHTML = results.map(item => `
+            <div class="track-card" data-id="${item.id}">
+                <div class="thumbnail">
+                    <i class="fas ${item.type === 'audio' ? 'fa-music' : 'fa-video'}" style="font-size: 3rem;"></i>
+                    <span style="margin-left: 12px; font-size: 2rem;">${item.thumbnailIcon || '🎵'}</span>
+                </div>
+                <div class="track-title">${escapeHtml(item.title)}</div>
+                <div class="track-details">
+                    <span><i class="fas fa-user"></i> ${escapeHtml(item.artist)}</span>
+                    <span><i class="fas ${item.type === 'audio' ? 'fa-headphones' : 'fa-film'}"></i> ${item.type}</span>
+                </div>
+                <div class="card-buttons">
+                    <button class="btn-download" data-id="${item.id}"><i class="fas fa-download"></i> Download ${item.type === 'audio' ? 'Audio' : 'Video'}</button>
+                    <button class="btn-play-preview" data-preview="${item.previewMp3}" data-type="${item.type}" data-id-preview="${item.id}"><i class="fas fa-play"></i> Preview</button>
+                </div>
+                <div id="player-${item.id}" class="preview-player" style="margin-top: 10px;"></div>
+            </div>
+        `).join("");
+
+        // attach event listeners to download buttons
+        document.querySelectorAll(".btn-download").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const cardId = parseInt(btn.getAttribute("data-id"));
+                const targetItem = results.find(i => i.id === cardId);
+                if (targetItem) downloadMedia(targetItem);
+                else alert("item not found");
+            });
+        });
+
+        // attach preview buttons to create audio/video player inline
+        document.querySelectorAll(".btn-play-preview").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const previewUrl = btn.getAttribute("data-preview");
+                const mediaType = btn.getAttribute("data-type");
+                const idPreview = btn.getAttribute("data-id-preview");
+                const playerDiv = document.getElementById(`player-${idPreview}`);
+                if (!playerDiv) return;
+                // clear previous player
+                playerDiv.innerHTML = "";
+                if (mediaType === "audio") {
+                    const audioElem = document.createElement("audio");
+                    audioElem.controls = true;
+                    audioElem.src = previewUrl;
+                    audioElem.style.width = "100%";
+                    audioElem.style.borderRadius = "30px";
+                    playerDiv.appendChild(audioElem);
+                    audioElem.play().catch(e => console.log("autoplay blocked"));
+                } else {
+                    const videoElem = document.createElement("video");
+                    videoElem.controls = true;
+                    videoElem.src = previewUrl;
+                    videoElem.style.width = "100%";
+                    videoElem.style.borderRadius = "18px";
+                    videoElem.style.maxHeight = "180px";
+                    playerDiv.appendChild(videoElem);
+                    videoElem.play().catch(e => console.log("autoplay blocked"));
+                }
+                // optional: remove other active players ?
+            });
+        });
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // Perform search across title, artist, type (everything)
+    function performSearch() {
+        const query = searchInput.value.trim().toLowerCase();
+        if (query === "") {
+            currentSearchResults = [...LIBRARY];
+        } else {
+            currentSearchResults = LIBRARY.filter(item => 
+                item.title.toLowerCase().includes(query) || 
+                item.artist.toLowerCase().includes(query) ||
+                (item.type && item.type.includes(query))
+            );
+        }
+        renderCards(currentSearchResults);
+    }
+
+    // Quality selector
+    function initQualityButtons() {
+        const btns = document.querySelectorAll(".quality-btn");
+        btns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                btns.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                const quality = btn.getAttribute("data-quality");
+                currentQuality = quality;
+                // re-render same results to keep fresh (download urls will reflect quality)
+                renderCards(currentSearchResults);
+            });
+        });
+    }
+
+    // initial load & heroku friendly (static works perfect)
+    function init() {
+        initQualityButtons();
+        currentSearchResults = [...LIBRARY];
+        renderCards(currentSearchResults);
+        searchBtn.addEventListener("click", performSearch);
+        searchInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") performSearch();
+        });
+        // add extra copper flower logo outside already present
+        const footer = document.querySelector('.footer-flower');
+        const copperCredit = document.createElement('div');
+        copperCredit.innerHTML = `<i class="fas fa-crown"></i> copper flower alchemy · 360° high quality audio/video · heroku ready`;
+        footer.appendChild(copperCredit);
+    }
+
+    // extra flower burst: dynamic add copper flower assets
+    window.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
