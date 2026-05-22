@@ -1,0 +1,22 @@
+{
+  "songs": [
+    {
+      "id": 1,
+      "title": "Midnight Copper",
+      "artist": "Flora Vibe",
+      "type": "audio",
+      "qualityHigh": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+      "qualityMed": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+      "thumbnailIcon": "🎸"
+    },
+    {
+      "id": 2,
+      "title": "Blossom Fury",
+      "artist": "Copper Petals",
+      "type": "audio",
+      "qualityHigh": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+      "qualityMed": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+      "thumbnailIcon": "🎤"
+    }
+  ]
+}
